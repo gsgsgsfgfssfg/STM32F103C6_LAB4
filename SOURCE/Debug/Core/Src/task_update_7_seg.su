@@ -1,0 +1,2 @@
+task_update_7_seg.c:8:6:update7SEGBuffer	8	static
+task_update_7_seg.c:20:6:update7SEGIndex	4	static

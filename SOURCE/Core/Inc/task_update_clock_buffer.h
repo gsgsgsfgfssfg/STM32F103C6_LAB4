@@ -1,0 +1,6 @@
+#ifndef INC_TASK_UPDATE_CLOCK_BUFFER_H_
+#define INC_TASK_UPDATE_CLOCK_BUFFER_H_
+
+void updateClockBuffer();
+
+#endif /* INC_TASK_UPDATE_CLOCK_BUFFER_H_ */

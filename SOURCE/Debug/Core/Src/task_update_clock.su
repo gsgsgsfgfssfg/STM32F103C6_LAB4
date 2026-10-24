@@ -1,0 +1,2 @@
+task_update_clock.c:6:6:clockInit	16	static
+task_update_clock.c:12:6:updateClock	4	static
