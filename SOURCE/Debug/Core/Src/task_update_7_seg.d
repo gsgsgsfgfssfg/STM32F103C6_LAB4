@@ -21,10 +21,17 @@ Core/Src/task_update_7_seg.o: ../Core/Src/task_update_7_seg.c \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_cortex.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h \
+ ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_iwdg.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h \
- ../Core/Inc/task_display_7_seg.h ../Core/Inc/main.h
+ ../Core/Inc/task_display_7_seg.h ../Core/Inc/main.h ../Core/Inc/global.h \
+ ../Core/Inc/task_led_blinking.h ../Core/Inc/scheduler.h \
+ ../Core/Inc/sch_error.h ../Core/Inc/watchdog.h \
+ ../Core/Inc/task_dot_blinking.h ../Core/Inc/task_update_clock.h \
+ ../Core/Inc/task_update_clock_buffer.h ../Core/Inc/task_update_7_seg.h \
+ ../Core/Inc/task_display_7_seg.h ../Core/Inc/task_display_matrix.h \
+ ../Core/Inc/task_update_matrix_buffer.h
 
 ../Core/Inc/task_update_7_seg.h:
 
@@ -70,6 +77,8 @@ Core/Src/task_update_7_seg.o: ../Core/Src/task_update_7_seg.c \
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_flash_ex.h:
 
+../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_iwdg.h:
+
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_pwr.h:
 
 ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h:
@@ -79,3 +88,27 @@ Core/Src/task_update_7_seg.o: ../Core/Src/task_update_7_seg.c \
 ../Core/Inc/task_display_7_seg.h:
 
 ../Core/Inc/main.h:
+
+../Core/Inc/global.h:
+
+../Core/Inc/task_led_blinking.h:
+
+../Core/Inc/scheduler.h:
+
+../Core/Inc/sch_error.h:
+
+../Core/Inc/watchdog.h:
+
+../Core/Inc/task_dot_blinking.h:
+
+../Core/Inc/task_update_clock.h:
+
+../Core/Inc/task_update_clock_buffer.h:
+
+../Core/Inc/task_update_7_seg.h:
+
+../Core/Inc/task_display_7_seg.h:
+
+../Core/Inc/task_display_matrix.h:
+
+../Core/Inc/task_update_matrix_buffer.h:

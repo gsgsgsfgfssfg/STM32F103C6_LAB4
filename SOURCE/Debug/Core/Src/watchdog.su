@@ -1,0 +1,5 @@
+watchdog.c:5:6:setWatchDogLED	16	static
+watchdog.c:8:6:blinkWatchDogLED	16	static
+watchdog.c:17:6:watchDogInit	8	static
+watchdog.c:21:9:isWatchDogReset	4	static
+watchdog.c:28:6:watchDogRefresh	8	static

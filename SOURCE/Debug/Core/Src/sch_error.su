@@ -1,0 +1,5 @@
+sch_error.c:6:6:setError	16	static
+sch_error.c:10:6:errorInit	8	static
+sch_error.c:14:9:getError	16	static
+sch_error.c:17:6:errorLedStart	8	static
+sch_error.c:21:6:errorRun	8	static

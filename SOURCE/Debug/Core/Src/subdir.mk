@@ -5,7 +5,9 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
+../Core/Src/global.c \
 ../Core/Src/main.c \
+../Core/Src/sch_error.c \
 ../Core/Src/scheduler.c \
 ../Core/Src/stm32f1xx_hal_msp.c \
 ../Core/Src/stm32f1xx_it.c \
@@ -19,10 +21,13 @@ C_SRCS += \
 ../Core/Src/task_update_7_seg.c \
 ../Core/Src/task_update_clock.c \
 ../Core/Src/task_update_clock_buffer.c \
-../Core/Src/task_update_matrix_buffer.c 
+../Core/Src/task_update_matrix_buffer.c \
+../Core/Src/watchdog.c 
 
 OBJS += \
+./Core/Src/global.o \
 ./Core/Src/main.o \
+./Core/Src/sch_error.o \
 ./Core/Src/scheduler.o \
 ./Core/Src/stm32f1xx_hal_msp.o \
 ./Core/Src/stm32f1xx_it.o \
@@ -36,10 +41,13 @@ OBJS += \
 ./Core/Src/task_update_7_seg.o \
 ./Core/Src/task_update_clock.o \
 ./Core/Src/task_update_clock_buffer.o \
-./Core/Src/task_update_matrix_buffer.o 
+./Core/Src/task_update_matrix_buffer.o \
+./Core/Src/watchdog.o 
 
 C_DEPS += \
+./Core/Src/global.d \
 ./Core/Src/main.d \
+./Core/Src/sch_error.d \
 ./Core/Src/scheduler.d \
 ./Core/Src/stm32f1xx_hal_msp.d \
 ./Core/Src/stm32f1xx_it.d \
@@ -53,7 +61,8 @@ C_DEPS += \
 ./Core/Src/task_update_7_seg.d \
 ./Core/Src/task_update_clock.d \
 ./Core/Src/task_update_clock_buffer.d \
-./Core/Src/task_update_matrix_buffer.d 
+./Core/Src/task_update_matrix_buffer.d \
+./Core/Src/watchdog.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

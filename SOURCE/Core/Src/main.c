@@ -22,15 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "task_led_blinking.h"
-#include "scheduler.h"
-#include "task_dot_blinking.h"
-#include "task_update_clock.h"
-#include "task_update_clock_buffer.h"
-#include "task_update_7_seg.h"
-#include "task_display_7_seg.h"
-#include "task_display_matrix.h"
-#include "task_update_matrix_buffer.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,7 +40,6 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN PV */
 
@@ -58,6 +49,7 @@ TIM_HandleTypeDef htim2;
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_IWDG_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -95,19 +87,10 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_TIM2_Init();
+  MX_IWDG_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_Base_Start_IT(&htim2);
-  SCH_Init();
-  SCH_AddTask(ledBlinking, 2000, 2000);
-  SCH_AddTask(dotBlinking, 1000, 1000);
-  clockInit(15, 8, 50);
-  SCH_AddTask(updateClockBuffer,0,1000);
-  SCH_AddTask(updateClock, 1000, 1000);
-  SCH_AddTask(update7SEGIndex,250,250);
-  SCH_AddTask(update7SEGBuffer,0,250);
-  SCH_AddTask(updateFrame, 800, 800);
-  SCH_AddTask(updateIndex, 100, 100);
-  SCH_AddTask(updateMatrixBuffer,0,0);
+  mainInit();
+  mainTask();
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -134,9 +117,10 @@ void SystemClock_Config(void)
   /** Initializes the RCC Oscillators according to the specified parameters
   * in the RCC_OscInitTypeDef structure.
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI|RCC_OSCILLATORTYPE_LSI;
   RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
@@ -155,6 +139,34 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief IWDG Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_IWDG_Init(void)
+{
+
+  /* USER CODE BEGIN IWDG_Init 0 */
+
+  /* USER CODE END IWDG_Init 0 */
+
+  /* USER CODE BEGIN IWDG_Init 1 */
+
+  /* USER CODE END IWDG_Init 1 */
+  hiwdg.Instance = IWDG;
+  hiwdg.Init.Prescaler = IWDG_PRESCALER_256;
+  hiwdg.Init.Reload = 4095;
+  if (HAL_IWDG_Init(&hiwdg) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN IWDG_Init 2 */
+
+  /* USER CODE END IWDG_Init 2 */
+
 }
 
 /**
@@ -216,25 +228,25 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, ENM0_Pin|ENM1_Pin|DOT_Pin|LED_RED_Pin
-                          |EN0_Pin|EN1_Pin|EN2_Pin|EN3_Pin
-                          |ENM2_Pin|ENM3_Pin|ENM4_Pin|ENM5_Pin
-                          |ENM6_Pin|ENM7_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, WATCHDOG_Pin|ENM0_Pin|ENM1_Pin|DOT_Pin
+                          |LED_RED_Pin|EN0_Pin|EN1_Pin|EN2_Pin
+                          |EN3_Pin|ENM2_Pin|ENM3_Pin|ENM4_Pin
+                          |ENM5_Pin|ENM6_Pin|ENM7_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, SEG0_Pin|SEG1_Pin|SEG2_Pin|ROW2_Pin
                           |ROW3_Pin|ROW4_Pin|ROW5_Pin|ROW6_Pin
                           |ROW7_Pin|SEG3_Pin|SEG4_Pin|SEG5_Pin
-                          |SEG6_Pin|ROW0_Pin|ROW1_Pin, GPIO_PIN_RESET);
+                          |SEG6_Pin|ERROR_LED_Pin|ROW0_Pin|ROW1_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : ENM0_Pin ENM1_Pin DOT_Pin LED_RED_Pin
-                           EN0_Pin EN1_Pin EN2_Pin EN3_Pin
-                           ENM2_Pin ENM3_Pin ENM4_Pin ENM5_Pin
-                           ENM6_Pin ENM7_Pin */
-  GPIO_InitStruct.Pin = ENM0_Pin|ENM1_Pin|DOT_Pin|LED_RED_Pin
-                          |EN0_Pin|EN1_Pin|EN2_Pin|EN3_Pin
-                          |ENM2_Pin|ENM3_Pin|ENM4_Pin|ENM5_Pin
-                          |ENM6_Pin|ENM7_Pin;
+  /*Configure GPIO pins : WATCHDOG_Pin ENM0_Pin ENM1_Pin DOT_Pin
+                           LED_RED_Pin EN0_Pin EN1_Pin EN2_Pin
+                           EN3_Pin ENM2_Pin ENM3_Pin ENM4_Pin
+                           ENM5_Pin ENM6_Pin ENM7_Pin */
+  GPIO_InitStruct.Pin = WATCHDOG_Pin|ENM0_Pin|ENM1_Pin|DOT_Pin
+                          |LED_RED_Pin|EN0_Pin|EN1_Pin|EN2_Pin
+                          |EN3_Pin|ENM2_Pin|ENM3_Pin|ENM4_Pin
+                          |ENM5_Pin|ENM6_Pin|ENM7_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -243,11 +255,11 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : SEG0_Pin SEG1_Pin SEG2_Pin ROW2_Pin
                            ROW3_Pin ROW4_Pin ROW5_Pin ROW6_Pin
                            ROW7_Pin SEG3_Pin SEG4_Pin SEG5_Pin
-                           SEG6_Pin ROW0_Pin ROW1_Pin */
+                           SEG6_Pin ERROR_LED_Pin ROW0_Pin ROW1_Pin */
   GPIO_InitStruct.Pin = SEG0_Pin|SEG1_Pin|SEG2_Pin|ROW2_Pin
                           |ROW3_Pin|ROW4_Pin|ROW5_Pin|ROW6_Pin
                           |ROW7_Pin|SEG3_Pin|SEG4_Pin|SEG5_Pin
-                          |SEG6_Pin|ROW0_Pin|ROW1_Pin;
+                          |SEG6_Pin|ERROR_LED_Pin|ROW0_Pin|ROW1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -257,7 +269,29 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-	SCH_Update();
+	if (htim->Instance == TIM2){
+		SCH_Update();
+		errorRun();
+	}
+}
+
+void mainInit(){
+	clockInit(15, 8, 50);
+	SCH_Init();
+	errorInit();
+	watchDogInit();
+}
+void mainTask(){
+	SCH_AddTask(ledBlinking, 2000, 2000);
+	SCH_AddTask(dotBlinking, 1000, 1000);
+	SCH_AddTask(updateClockBuffer,0,1000);
+	SCH_AddTask(updateClock, 1000, 1000);
+	SCH_AddTask(update7SEGIndex,250,250);
+	SCH_AddTask(update7SEGBuffer,0,250);
+	SCH_AddTask(updateFrame, 800, 800);
+	SCH_AddTask(updateIndex, 100, 100);
+	SCH_AddTask(updateMatrixBuffer,0,0);
+	SCH_AddTask(watchDogRefresh,10,100);
 }
 /* USER CODE END 4 */
 
