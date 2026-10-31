@@ -40,9 +40,6 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-IWDG_HandleTypeDef hiwdg;
-
-TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN PV */
 
