@@ -3,6 +3,7 @@
 
 #include "global.h"
 #include "scheduler.h"
+#include "uart.h"
 
 #define SCH_OK                       0
 #define SCH_ERROR_NULL_CALLBACK      1
@@ -14,8 +15,9 @@ extern uint8_t errorTimerTick;
 
 void setError(uint8_t error);
 void errorInit();
-uint8_t getError(uint8_t error);
-void errorLedStart();
-void errorRun();
+uint8_t getError();
+void printError();
+//void errorLedStart();
+//void errorRun();
 
 #endif /* INC_SCH_ERROR_H_ */

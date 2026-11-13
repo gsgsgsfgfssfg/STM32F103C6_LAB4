@@ -1,14 +1,14 @@
 #include "scheduler.h"
 
 uint8_t SCH_count;
-static uint32_t nextTaskID=0;
+static uint32_t SCH_ticks = 0;
 TIM_HandleTypeDef htim2;
 int TIME_CYCLES = 10;
 
-uint32_t getNewTaskID(){
-	nextTaskID++;
-	return nextTaskID;
+uint32_t SCH_GetTime(){
+	return SCH_ticks;
 }
+
 void SCH_Init(){
 	HAL_TIM_Base_Start_IT(&htim2);
 	TIME_CYCLES = ((htim2.Init.Prescaler + 1) * (htim2.Init.Period+1) * 1000)/HAL_RCC_GetHCLKFreq();
@@ -21,7 +21,7 @@ void SCH_Init(){
 	SCH_count = 0;
 }
 
-unsigned char SCH_Insert(void (*pFunction)(), unsigned int DELAY, unsigned int PERIOD, unsigned int TASKID){
+unsigned char SCH_Insert(void (*pFunction)(), unsigned int DELAY, unsigned int PERIOD, char *TASKID){
 	if (pFunction == NULL) {
 		SCH_ReportError(SCH_ERROR_NULL_CALLBACK);
 		return SCH_MAX_TASKS;
@@ -58,7 +58,7 @@ unsigned char SCH_Insert(void (*pFunction)(), unsigned int DELAY, unsigned int P
 	return SCH_OK;
 }
 
-unsigned char SCH_AddTask(void (*pFunction)(), unsigned int DELAY, unsigned int PERIOD){
+unsigned char SCH_AddTask(void (*pFunction)(), unsigned int DELAY, unsigned int PERIOD, char *TASKID){
 	if (pFunction == NULL) {
 		SCH_ReportError(SCH_ERROR_NULL_CALLBACK);
 		return SCH_MAX_TASKS;
@@ -67,7 +67,6 @@ unsigned char SCH_AddTask(void (*pFunction)(), unsigned int DELAY, unsigned int 
 		SCH_ReportError(SCH_ERROR_QUEUE_FULL);
 		return SCH_MAX_TASKS;
 	}
-	uint32_t TASKID = getNewTaskID();
 	return SCH_Insert(pFunction, DELAY/TIME_CYCLES, PERIOD/TIME_CYCLES, TASKID);
 }
 
@@ -76,6 +75,10 @@ void SCH_DispatchTasks(){
 	if (SCH_tasks_G[0].RunMe > 0){
 		sTask t = SCH_tasks_G[0];
 		t.pTask();
+		if (t.Period == 0) uart_print("One shot task triggered!\r\n");
+		char msg[200];
+		sprintf(msg,"[%ld] Task %s dispatched\r\n", SCH_GetTime(), t.TaskID);
+		uart_print(msg);
 		if (SCH_DeleteTask(t.TaskID) == SCH_OK && t.Period !=0)
 			SCH_Insert(t.pTask,t.Period,t.Period,t.TaskID);
 	}
@@ -85,9 +88,10 @@ void SCH_Update(){
 	if (SCH_count == 0) return;
 	if (SCH_tasks_G[0].Delay > 0) SCH_tasks_G[0].Delay --;
 	if (SCH_tasks_G[0].Delay <= 0) SCH_tasks_G[0].RunMe = 1;
+	SCH_ticks+= TIME_CYCLES;
 }
 
-unsigned char SCH_DeleteTask(const uint32_t TASK_ID){
+unsigned char SCH_DeleteTask(const char *TASK_ID){
 	if (SCH_count == 0) return 0;
 	uint8_t TASK_INDEX = 0;
 	uint8_t found = 0;
@@ -116,5 +120,6 @@ unsigned char SCH_DeleteTask(const uint32_t TASK_ID){
 void SCH_ReportError(uint8_t errorCode){
 	if (errorCode ==  SCH_OK) return;
 	setError(errorCode);
-	errorLedStart();
+	printError();
+	//errorLedStart();
 }

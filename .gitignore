@@ -1,0 +1,10 @@
+SOURCE/Debug/
+SOURCE/Release/
+SOURCE/**/*.o
+SOURCE/**/*.d
+SOURCE/**/*.elf
+SOURCE/**/*.map
+SOURCE/**/*.su
+.metadata/
+*.pdsbak
+*.workspace

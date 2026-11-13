@@ -44,6 +44,7 @@ extern "C" {
 #include "task_display_7_seg.h"
 #include "task_display_matrix.h"
 #include "task_update_matrix_buffer.h"
+#include "uart.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

@@ -22,6 +22,7 @@ C_SRCS += \
 ../Core/Src/task_update_clock.c \
 ../Core/Src/task_update_clock_buffer.c \
 ../Core/Src/task_update_matrix_buffer.c \
+../Core/Src/uart.c \
 ../Core/Src/watchdog.c 
 
 OBJS += \
@@ -42,6 +43,7 @@ OBJS += \
 ./Core/Src/task_update_clock.o \
 ./Core/Src/task_update_clock_buffer.o \
 ./Core/Src/task_update_matrix_buffer.o \
+./Core/Src/uart.o \
 ./Core/Src/watchdog.o 
 
 C_DEPS += \
@@ -62,6 +64,7 @@ C_DEPS += \
 ./Core/Src/task_update_clock.d \
 ./Core/Src/task_update_clock_buffer.d \
 ./Core/Src/task_update_matrix_buffer.d \
+./Core/Src/uart.d \
 ./Core/Src/watchdog.d 
 
 

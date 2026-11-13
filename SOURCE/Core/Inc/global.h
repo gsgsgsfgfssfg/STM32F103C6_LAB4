@@ -3,14 +3,10 @@
 
 #include "stm32f1xx_hal.h"
 
-#define WATCHDOG_Pin GPIO_PIN_1
-#define WATCHDOG_GPIO_Port GPIOA
-#define ENM0_Pin GPIO_PIN_2
+#define ENM0_Pin GPIO_PIN_1
 #define ENM0_GPIO_Port GPIOA
-#define ENM1_Pin GPIO_PIN_3
+#define ENM1_Pin GPIO_PIN_4
 #define ENM1_GPIO_Port GPIOA
-#define DOT_Pin GPIO_PIN_4
-#define DOT_GPIO_Port GPIOA
 #define LED_RED_Pin GPIO_PIN_5
 #define LED_RED_GPIO_Port GPIOA
 #define EN0_Pin GPIO_PIN_6
@@ -59,11 +55,10 @@
 #define SEG5_GPIO_Port GPIOB
 #define SEG6_Pin GPIO_PIN_6
 #define SEG6_GPIO_Port GPIOB
-#define ERROR_LED_Pin GPIO_PIN_7
-#define ERROR_LED_GPIO_Port GPIOB
+#define DOT_Pin GPIO_PIN_7
+#define DOT_GPIO_Port GPIOB
 #define ROW0_Pin GPIO_PIN_8
 #define ROW0_GPIO_Port GPIOB
 #define ROW1_Pin GPIO_PIN_9
 #define ROW1_GPIO_Port GPIOB
-
 #endif /* INC_GLOBAL_H_ */

@@ -2,7 +2,7 @@
 
 IWDG_HandleTypeDef hiwdg;
 
-void setWatchDogLED(GPIO_PinState val){
+/*void setWatchDogLED(GPIO_PinState val){
 	HAL_GPIO_WritePin(WATCHDOG_GPIO_Port, WATCHDOG_Pin, val);
 }
 void blinkWatchDogLED(){
@@ -13,10 +13,11 @@ void blinkWatchDogLED(){
 		HAL_Delay(100);
 		HAL_IWDG_Refresh(&hiwdg);
 	}
-}
+}*/
 void watchDogInit(){
-	if (isWatchDogReset() == 1) blinkWatchDogLED();
-	setWatchDogLED(GPIO_PIN_SET);
+	if (isWatchDogReset() == 1) {
+		uart_print("Watchdog not refresh in time!\r\n");
+	}
 }
 uint8_t isWatchDogReset(){
 	if (__HAL_RCC_GET_FLAG(RCC_FLAG_IWDGRST) != RESET){

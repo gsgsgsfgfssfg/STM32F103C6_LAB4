@@ -40,6 +40,9 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
+IWDG_HandleTypeDef hiwdg;
+
+TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN PV */
 
@@ -50,6 +53,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
 static void MX_IWDG_Init(void);
+static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -88,6 +92,7 @@ int main(void)
   MX_GPIO_Init();
   MX_TIM2_Init();
   MX_IWDG_Init();
+  MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
   mainInit();
   mainTask();
@@ -215,6 +220,39 @@ static void MX_TIM2_Init(void)
 }
 
 /**
+  * @brief USART2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USART2_UART_Init(void)
+{
+
+  /* USER CODE BEGIN USART2_Init 0 */
+
+  /* USER CODE END USART2_Init 0 */
+
+  /* USER CODE BEGIN USART2_Init 1 */
+
+  /* USER CODE END USART2_Init 1 */
+  huart2.Instance = USART2;
+  huart2.Init.BaudRate = 9600;
+  huart2.Init.WordLength = UART_WORDLENGTH_8B;
+  huart2.Init.StopBits = UART_STOPBITS_1;
+  huart2.Init.Parity = UART_PARITY_NONE;
+  huart2.Init.Mode = UART_MODE_TX_RX;
+  huart2.Init.HwFlowCtl = UART_HWCONTROL_NONE;
+  huart2.Init.OverSampling = UART_OVERSAMPLING_16;
+  if (HAL_UART_Init(&huart2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USART2_Init 2 */
+
+  /* USER CODE END USART2_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -228,25 +266,25 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, WATCHDOG_Pin|ENM0_Pin|ENM1_Pin|DOT_Pin
-                          |LED_RED_Pin|EN0_Pin|EN1_Pin|EN2_Pin
-                          |EN3_Pin|ENM2_Pin|ENM3_Pin|ENM4_Pin
-                          |ENM5_Pin|ENM6_Pin|ENM7_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, ENM0_Pin|ENM1_Pin|LED_RED_Pin|EN0_Pin
+                          |EN1_Pin|EN2_Pin|EN3_Pin|ENM2_Pin
+                          |ENM3_Pin|ENM4_Pin|ENM5_Pin|ENM6_Pin
+                          |ENM7_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, SEG0_Pin|SEG1_Pin|SEG2_Pin|ROW2_Pin
                           |ROW3_Pin|ROW4_Pin|ROW5_Pin|ROW6_Pin
                           |ROW7_Pin|SEG3_Pin|SEG4_Pin|SEG5_Pin
-                          |SEG6_Pin|ERROR_LED_Pin|ROW0_Pin|ROW1_Pin, GPIO_PIN_RESET);
+                          |SEG6_Pin|DOT_Pin|ROW0_Pin|ROW1_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : WATCHDOG_Pin ENM0_Pin ENM1_Pin DOT_Pin
-                           LED_RED_Pin EN0_Pin EN1_Pin EN2_Pin
-                           EN3_Pin ENM2_Pin ENM3_Pin ENM4_Pin
-                           ENM5_Pin ENM6_Pin ENM7_Pin */
-  GPIO_InitStruct.Pin = WATCHDOG_Pin|ENM0_Pin|ENM1_Pin|DOT_Pin
-                          |LED_RED_Pin|EN0_Pin|EN1_Pin|EN2_Pin
-                          |EN3_Pin|ENM2_Pin|ENM3_Pin|ENM4_Pin
-                          |ENM5_Pin|ENM6_Pin|ENM7_Pin;
+  /*Configure GPIO pins : ENM0_Pin ENM1_Pin LED_RED_Pin EN0_Pin
+                           EN1_Pin EN2_Pin EN3_Pin ENM2_Pin
+                           ENM3_Pin ENM4_Pin ENM5_Pin ENM6_Pin
+                           ENM7_Pin */
+  GPIO_InitStruct.Pin = ENM0_Pin|ENM1_Pin|LED_RED_Pin|EN0_Pin
+                          |EN1_Pin|EN2_Pin|EN3_Pin|ENM2_Pin
+                          |ENM3_Pin|ENM4_Pin|ENM5_Pin|ENM6_Pin
+                          |ENM7_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -255,11 +293,11 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pins : SEG0_Pin SEG1_Pin SEG2_Pin ROW2_Pin
                            ROW3_Pin ROW4_Pin ROW5_Pin ROW6_Pin
                            ROW7_Pin SEG3_Pin SEG4_Pin SEG5_Pin
-                           SEG6_Pin ERROR_LED_Pin ROW0_Pin ROW1_Pin */
+                           SEG6_Pin DOT_Pin ROW0_Pin ROW1_Pin */
   GPIO_InitStruct.Pin = SEG0_Pin|SEG1_Pin|SEG2_Pin|ROW2_Pin
                           |ROW3_Pin|ROW4_Pin|ROW5_Pin|ROW6_Pin
                           |ROW7_Pin|SEG3_Pin|SEG4_Pin|SEG5_Pin
-                          |SEG6_Pin|ERROR_LED_Pin|ROW0_Pin|ROW1_Pin;
+                          |SEG6_Pin|DOT_Pin|ROW0_Pin|ROW1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -271,7 +309,13 @@ static void MX_GPIO_Init(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 	if (htim->Instance == TIM2){
 		SCH_Update();
-		errorRun();
+		//errorRun();
+	}
+}
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
+	if (huart->Instance == USART2){
+		HAL_UART_Transmit(&huart2, &temp, 1, 50);
+		HAL_UART_Receive_IT(&huart2, &temp, 1);
 	}
 }
 
@@ -282,16 +326,16 @@ void mainInit(){
 	watchDogInit();
 }
 void mainTask(){
-	SCH_AddTask(ledBlinking, 2000, 2000);
-	SCH_AddTask(dotBlinking, 1000, 1000);
-	SCH_AddTask(updateClockBuffer,0,1000);
-	SCH_AddTask(updateClock, 1000, 1000);
-	SCH_AddTask(update7SEGIndex,250,250);
-	SCH_AddTask(update7SEGBuffer,0,250);
-	SCH_AddTask(updateFrame, 800, 800);
-	SCH_AddTask(updateIndex, 100, 100);
-	SCH_AddTask(updateMatrixBuffer,0,0);
-	SCH_AddTask(watchDogRefresh,10,100);
+	SCH_AddTask(ledBlinking, 2000, 2000, "Led Blinking");
+	SCH_AddTask(dotBlinking, 1000, 1000, "Dot Blinking");
+	SCH_AddTask(updateClockBuffer,0,1000, "Update Clock Buffer");
+	SCH_AddTask(updateClock, 1000, 1000, "Update Clock");
+	SCH_AddTask(update7SEGIndex,250,250, "Update 7Seg Index");
+	SCH_AddTask(update7SEGBuffer,0,250, "Update 7Seg Buffer");
+	SCH_AddTask(updateFrame, 800, 800, "Update Frame");
+	SCH_AddTask(updateIndex, 100, 100, "Update Matrix Index");
+	SCH_AddTask(updateMatrixBuffer,0,0, "Update Matrix Buffer");
+	SCH_AddTask(watchDogRefresh,10,100, "Refresh Watchdog");
 }
 /* USER CODE END 4 */
 
