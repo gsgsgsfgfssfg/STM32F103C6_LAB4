@@ -312,12 +312,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
 		//errorRun();
 	}
 }
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart){
-	if (huart->Instance == USART2){
-		HAL_UART_Transmit(&huart2, &temp, 1, 50);
-		HAL_UART_Receive_IT(&huart2, &temp, 1);
-	}
-}
 
 void mainInit(){
 	clockInit(15, 8, 50);

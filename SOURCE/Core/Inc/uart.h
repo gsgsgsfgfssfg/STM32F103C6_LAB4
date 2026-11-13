@@ -5,10 +5,14 @@
 #include <stdio.h>
 #include <string.h>
 
-extern UART_HandleTypeDef huart2;
-extern uint8_t temp;
+#define UART_OK                 0
+#define UART_QUEUE_FULL        -1
+#define UART_MESSAGE_TOO_LONG  -2
+#define UART_ERROR             -3
 
-void uart_init();
-void uart_print(const char *msg);
+extern UART_HandleTypeDef huart2;
+
+void uart_init(void);
+int uart_print(const char *msg);
 
 #endif /* INC_UART_H_ */
