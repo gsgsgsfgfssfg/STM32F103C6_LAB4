@@ -320,8 +320,8 @@ void mainInit(){
 	watchDogInit();
 }
 void mainTask(){
-	SCH_AddTask(ledBlinking, 2000, 2000, "Led Blinking");
-	SCH_AddTask(dotBlinking, 1000, 1000, "Dot Blinking");
+	SCH_AddTask(ledBlinking, 20, 2000, "Led Blinking");
+	SCH_AddTask(dotBlinking, 30, 1000, "Dot Blinking");
 	SCH_AddTask(updateClockBuffer,0,1000, "Update Clock Buffer");
 	SCH_AddTask(updateClock, 1000, 1000, "Update Clock");
 	SCH_AddTask(update7SEGIndex,250,250, "Update 7Seg Index");

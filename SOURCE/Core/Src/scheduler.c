@@ -6,7 +6,7 @@ TIM_HandleTypeDef htim2;
 int TIME_CYCLES = 10;
 
 uint32_t SCH_GetTime(){
-	return SCH_ticks;
+	return SCH_ticks*TIME_CYCLES;
 }
 
 void SCH_Init(){
@@ -85,10 +85,10 @@ void SCH_DispatchTasks(){
 }
 
 void SCH_Update(){
+	SCH_ticks++;
 	if (SCH_count == 0) return;
 	if (SCH_tasks_G[0].Delay > 0) SCH_tasks_G[0].Delay --;
 	if (SCH_tasks_G[0].Delay <= 0) SCH_tasks_G[0].RunMe = 1;
-	SCH_ticks+= TIME_CYCLES;
 }
 
 unsigned char SCH_DeleteTask(const char *TASK_ID){

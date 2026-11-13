@@ -1,7 +1,7 @@
 #include "uart.h"
 
-#define UART_QUEUE_SIZE     25
-#define UART_MESSAGE_SIZE   200
+#define UART_QUEUE_SIZE     100
+#define UART_MESSAGE_SIZE   50
 
 UART_HandleTypeDef huart2;
 
@@ -39,11 +39,7 @@ static void uart_start_next(void){
 
     tx_busy = 1;
 
-    if (HAL_UART_Transmit_IT(
-            &huart2,
-            (uint8_t *)tx_buffer,
-            len) != HAL_OK) {
-
+    if (HAL_UART_Transmit_IT(&huart2, (uint8_t *)tx_buffer, len) != HAL_OK) {
         tx_busy = 0;
         /* TODO: Handle transmission error */
     }
